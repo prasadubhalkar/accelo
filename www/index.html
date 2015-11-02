@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" 
+          content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' https://maps.googleapis.com/ https://maps.gstatic.com/ https://mts0.googleapis.com/ https://mts1.googleapis.com/ 'unsafe-inline' 'unsafe-eval'">
+    <link href="lib/ionic/css/ionic.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <!-- Adding Google Map -->
+    <script type="text/javascript"
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB75ruFHD2Hc0Sf8c28hdgP4P8chKEjDuY&sensor=true">
+    </script>
+
+    <!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
+    <link href="css/ionic.app.css" rel="stylesheet">
+    -->
+    <!-- ionic/angularjs js -->
+    <script src="lib/ionic/js/ionic.bundle.js"></script>
+
+    <!-- your app's js -->
+    <script src="js/services/driver.js"></script>
+    <script src="js/services/settings.js"></script>
+    <script src="js/services/positions.js"></script>
+    <script src="js/services/calculator.js"></script>
+    <script src="js/controllers/trackController.js"></script>
+
+    <!-- cordova script (this will be a 404 during development) -->
+    <script src="js/libs/ng-cordova.min.js"></script>
+    <script src="cordova.js"></script>
+  </head>
+
+  <body ng-app="accelo">
+    <ion-nav-view class="view-container"></ion-nav-view>
+  </body>
+</html>
