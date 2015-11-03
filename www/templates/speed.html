@@ -1,23 +1,17 @@
-<ion-view cache-view="false" view-title="Home">
-	<ion-content class="padding">
-		<div class="bar bar-header bar-light">
-			<div class="title"> <h1 ng-click="watchLocation()">Accelo</h1></div>
+<ion-view cache-view="false" view-title="Accelo">
+	<div class="row">
+		<div class="col-50 col-offset-10">{{distance}} miles</div>
+		<div class="col-50 col-offset-10">{{count}}</div>
+	</div>
+	
+	<div class="padding">
+		<div class="center large" ng-class="{ 'red': inRed, 'yellow': inYellow, 'green' : inGreen }">
+			{{speed}}
 		</div>
+	</div>
 
-		<div class="bar bar-subheader row">
-			<div class="col-50 col-offset-10">{{distance}} miles</div>
-			<div class="col-50 col-offset-10">{{count}}</div>
-		</div>
-		
-		<div class="content has-header padding">
-			<div class="center large" ng-class="{ 'red': inRed, 'yellow': inYellow, 'green' : inGreen }">
-				{{speed}}
-			</div>
-		</div>
+	<div id="map" data-tap-disabled="true"></div>
 
-		<div id="map" class="center" data-tap-disabled="true"></div>
-
-
-		<a href="#" class="button button-dark" ng-click="stopWatching()"> Stop </a>
-	</ion-content>
+	<a href="#" class="button button-positive" ng-click="watchLocation()"> Start </a>
+	<a href="#" class="button button-dark" ng-click="stopWatching()"> Stop </a>
 </ion-view>
