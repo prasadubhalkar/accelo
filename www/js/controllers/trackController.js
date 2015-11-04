@@ -41,21 +41,6 @@ function trackController($scope,$cordovaGeolocation,$cordovaNetwork){
     }
 
     /**
-     * [watchLocation When the watch location is been clicked]
-     * @return {[type]} [description]
-     */
-    self.watchLocation = function(){
-        self.watch = $cordovaGeolocation.watchPosition(settings.geoOptions);
-        self.watch.then(
-            null,
-            function(error) {
-              alert(error.message);
-            },
-            self.updateLocation
-        );
-    }
-
-    /**
      * [updateLocation is a callback for the watchlocation event]
      * @param  {[type]} result [latitude and longitude from navigator geolocation]
      * @return {[type]}        [description]
@@ -138,6 +123,29 @@ function trackController($scope,$cordovaGeolocation,$cordovaNetwork){
         self.distance = 0;
     }
 
+    /**
+     * [watchLocation When the watch location is been clicked]
+     * @return {[type]} [description]
+     */
+    self.watchLocation = function(){
+        self.watch = $cordovaGeolocation.watchPosition(settings.geoOptions);
+        self.watch.then(
+            null,
+            function(error) {
+              alert(error.message);
+            },
+            self.updateLocation
+        );
+    }
+
+    $scope.watchlocation = function() {
+        self.watchlocation();
+    }
+
+    $scope.stopWatching = function() {
+        self.stopWatching();
+    }
+
     //watch for every update count and trigger update scope
     $scope.$watch(angular.bind(self,function(){
         return self.count;
@@ -158,6 +166,3 @@ function trackController($scope,$cordovaGeolocation,$cordovaNetwork){
         
     },false);
 }
-
-//initialize controller and add it to the module
-accelo.controller('trackController',trackController);

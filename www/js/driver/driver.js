@@ -6,6 +6,8 @@ var toRad = function(val){
 }
 
 var accelo = angular.module('accelo', ['ionic','ngCordova']);
+//initialize controller and add it to the module
+accelo.controller('trackController',trackController);
 
 //initiatlizing google maps api on window load
 google.maps.event.addDomListener(window,'load',this.init);
@@ -35,7 +37,8 @@ accelo.config(function($stateProvider,$urlRouterProvider){
 
     $stateProvider.state('home', {
         url: '/',
-        templateUrl: 'templates/speed.html',
-        controller : 'trackController'
+        templateUrl     : 'templates/speed.html',
+        controller      : 'trackController',
+        controllerAs    : 'tc'
     });
 });
