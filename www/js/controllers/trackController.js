@@ -3,34 +3,33 @@
  * $scope               [Object]  Controller scope
  * $cordovaGeolocation  [Factory] Apache Cordova Factory Wrapper around navigator geolocation
  */
-accelo.controller("trackController",function($scope,$cordovaGeolocation,$rootScope, $cordovaNetwork){
-    $scope.count    = 0;        
-    $scope.speed    = 0;        
-    $scope.currDist = 0;        
-    $scope.distance = 0;        
-    $scope.inGreen  = false;    
-    $scope.inYellow = false;    
-    $scope.inRed    = false;    
-    $scope.speeds   = [];
-    $scope.watch    = {};
-    $scope.path     = {};
-    google.maps.event.addDomListener(window,'load',$scope.init);
+function trackController($scope,$cordovaGeolocation,$cordovaNetwork){
+    var self      = this;
+    self.count    = 0;        
+    self.speed    = 0;        
+    self.currDist = 0;        
+    self.distance = 0;        
+    self.speeds   = [];
+    self.watch    = {};
+    self.path     = {};
+    self.arr      = [];
 
     /**
      * [init function will initiate the map]
      * @return {[type]} [description]
      */
-    $scope.init = function(){
+    self.init = function(){
         var latLng = new google.maps.LatLng(0,0);
 
         var mapOptions = {
-            center : latLng,
-            zoom : 16,
-            mapTypeId : google.maps.MapTypeId.ROADMAP
+            center      : latLng,
+            zoom        : 16,
+            mapTypeId   : google.maps.MapTypeId.ROADMAP
         };
-        $scope.map          = new google.maps.Map(document.getElementById("map"),mapOptions);
 
-        $scope.path = new google.maps.Polyline({
+        self.map          = new google.maps.Map(document.getElementById("map"),mapOptions);
+
+        self.path = new google.maps.Polyline({
             path : [],
             geodesic : true,
             strokeColor : '#0000FF',
@@ -38,21 +37,21 @@ accelo.controller("trackController",function($scope,$cordovaGeolocation,$rootSco
             strokeWeight : 4
         });
 
-        $scope.watchLocation();
+        self.watchLocation();
     }
 
     /**
      * [watchLocation When the watch location is been clicked]
      * @return {[type]} [description]
      */
-    $scope.watchLocation = function(){
-        $scope.watch = $cordovaGeolocation.watchPosition(settings.geoOptions);
-        $scope.watch.then(
+    self.watchLocation = function(){
+        self.watch = $cordovaGeolocation.watchPosition(settings.geoOptions);
+        self.watch.then(
             null,
             function(error) {
               alert(error.message);
             },
-            $scope.updateLocation
+            self.updateLocation
         );
     }
 
@@ -61,52 +60,34 @@ accelo.controller("trackController",function($scope,$cordovaGeolocation,$rootSco
      * @param  {[type]} result [latitude and longitude from navigator geolocation]
      * @return {[type]}        [description]
      */
-    $scope.updateLocation = function(result){
-        var arr = $scope.path.getPath(),
-            pos = { 
-                lat : result.coords.latitude, 
-                lng : result.coords.longitude 
-            };
+    self.updateLocation = function(result){
+        //get current lats and lngs from the polyline
+        self.arr = self.path.getPath();
 
+        //set current position from the navigation geolocation result
+        //set the current position in our service
+        //add positions in the polyline temp array
+        self.curPos = { 
+            lat : result.coords.latitude, 
+            lng : result.coords.longitude 
+        };
         positions.setCords(result.coords.latitude,result.coords.longitude);
+        self.arr.push(new google.maps.LatLng(self.curPos.lat, self.curPos.lng));
+
+        //set current position as center of map as it is the last known position 
+        self.map.setCenter(self.curPos);
         
-        arr.push(new google.maps.LatLng(pos.lat, pos.lng));
+        //calculate the result speed, distance using calculator service
+        //update speed and add to array of speeds
+        self.result   = calculator.calculate();
+        self.speed  = self.result.speed;
+        self.speeds.push(self.speed);
 
-        $scope.count    += 1;
-        $scope.map.setCenter(pos);
+        //update distance and format display
+        self.currDist += self.result.distance;
+        self.distance = self.currDist.toFixed(2);
 
-        if($scope.count == 1) {
-            var image = {
-                url: 'http://maps.google.com/mapfiles/kml/pal4/icon49.png',
-                // This marker is 20 pixels wide by 32 pixels high.
-                size: new google.maps.Size(25, 35),
-                // The origin for this image is (0, 0).
-                origin: new google.maps.Point(0, 0),
-                // The anchor for this image is the base of the flagpole at (0, 32).
-                anchor: new google.maps.Point(0, 32)
-            };
-
-            $scope.marker   = new google.maps.Marker({
-                position    : pos,
-                icon        : image,
-                draggable   : false,
-                map         : $scope.map
-            });    
-
-        } else {
-            path.setPath(arr);
-            path.setMap($scope.map);
-        }
-        
-        $scope.result   = calculator.calculate();
-        $scope.speed    = $scope.result.speed;
-
-        $scope.speeds.push($scope.speed);
-
-        $scope.currDist += $scope.result.distance;
-        $scope.distance = $scope.currDist.toFixed(2);
-
-        $scope.updateSpeedDisplay($scope.speed)
+        self.count    += 1;
     }
 
     /**
@@ -114,54 +95,69 @@ accelo.controller("trackController",function($scope,$cordovaGeolocation,$rootSco
      * @param  {[type]} speed [description]
      * @return {[type]}       [description]
      */
-    $scope.updateSpeedDisplay = function(speed){
-        if(speed < 40){
-            $scope.inGreen = true;
-            $scope.inYellow = false;
-            $scope.inRed = false;
-        } else if(speed > 50 && speed < 70) {
-            $scope.inGreen = false;
-            $scope.inYellow = true;
-            $scope.inRed = false;
-        } else if(speed > 70){
-            $scope.inGreen = false;
-            $scope.inYellow = false;
-            $scope.inRed = true;
+    self.updateSpeedDisplay = function(){
+        if(self.count == 1) {
+            self.marker   = new google.maps.Marker({
+                position    : self.curPos,
+                icon        : settings.getImage,
+                draggable   : false,
+                map         : self.map
+            });    
+
+        } else {
+            self.path.setPath(self.arr);
+            self.path.setMap(self.map);
         }
+
+        $scope.speed    = self.speed;
+        $scope.count    = self.count;
+        $scope.distance = self.distance;
     }
 
     /**
      * [stopWatching will clear the watch for the current geolocation watch]
      * @return {[type]} [description]
      */
-    $scope.stopWatching = function(){
+    self.stopWatching = function(){
         try {
-            $scope.watch.clearWatch();
-            var length = $scope.speeds.length - 1,
+            self.watch.clearWatch();
+            var length = self.speeds.length - 1,
                 sum = 0, avg = 0;
             for (var i = length; i >= 0; i--) {
-                sum += $scope.speeds[i];
+                sum += self.speeds[i];
             }
             
-            if($scope.count > 0) {
-                avg = sum / $scope.count;
+            if(self.count > 0) {
+                avg = sum / self.count;
             }
             alert(avg);    
         } catch(e){
             alert(e.message);
         }
-        $scope.count = 0;
-        $scope.distance = 0;
+        self.count = 0;
+        self.distance = 0;
     }
 
+    //watch for every update count and trigger update scope
+    $scope.$watch(angular.bind(self,function(){
+        return self.count;
+    }),self.updateSpeedDisplay);
+
+    self.init(); //need this if developing using ionic serve
+
+    //checking if the mobile device is ready
     document.addEventListener("deviceready", function () {
         var isOnline = $cordovaNetwork.isOnline();
 
+        //is device online 
         if(isOnline) {
-            $scope.init();    
+            self.init();    
         } else {
             alert("Device is offline");
         }
         
     },false);
-});
+}
+
+//initialize controller and add it to the module
+accelo.controller('trackController',trackController);

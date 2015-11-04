@@ -7,6 +7,8 @@ var toRad = function(val){
 
 var accelo = angular.module('accelo', ['ionic','ngCordova']);
 
+//initiatlizing google maps api on window load
+google.maps.event.addDomListener(window,'load',this.init);
 // Ionic Starter App
 
 // angular.module is a global place for creating, registering and retrieving Angular modules
@@ -25,6 +27,9 @@ accelo.run(function($ionicPlatform) {
     });
 });
 
+/**
+ * [define the route and start up configuration]
+ */
 accelo.config(function($stateProvider,$urlRouterProvider){
     $urlRouterProvider.otherwise('/');
 

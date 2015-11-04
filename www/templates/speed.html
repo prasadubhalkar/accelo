@@ -5,7 +5,7 @@
 	</div>
 	
 	<div class="padding">
-		<div class="center large" ng-class="{ 'red': inRed, 'yellow': inYellow, 'green' : inGreen }">
+		<div class="center large" ng-class="speed >= 70 ? 'red' : (speed >= 50 ? 'yellow' : 'green') "> 
 			{{speed}}
 		</div>
 	</div>
