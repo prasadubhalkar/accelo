@@ -8,6 +8,7 @@ var toRad = function(val){
 var accelo = angular.module('accelo', ['ionic','ngCordova']);
 //initialize controller and add it to the module
 accelo.controller('trackController',trackController);
+accelo.controller('settingsController',settingsController);
 
 //initiatlizing google maps api on window load
 google.maps.event.addDomListener(window,'load',this.init);
@@ -33,12 +34,14 @@ accelo.run(function($ionicPlatform) {
  * [define the route and start up configuration]
  */
 accelo.config(function($stateProvider,$urlRouterProvider){
-    $urlRouterProvider.otherwise('/');
-
     $stateProvider.state('home', {
         url: '/',
         templateUrl     : 'templates/speed.html',
-        controller      : 'trackController',
-        controllerAs    : 'tc'
+        controller      : 'trackController as tc'
+    }).state('settings',{
+        url: '/settings',
+        templateUrl     : 'templates/settings.html',
+        controller      : 'settingsController as sc'
     });
+    $urlRouterProvider.otherwise('/home');
 });

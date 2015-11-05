@@ -3,16 +3,16 @@
  * $scope               [Object]  Controller scope
  * $cordovaGeolocation  [Factory] Apache Cordova Factory Wrapper around navigator geolocation
  */
-function trackController($scope,$cordovaGeolocation,$cordovaNetwork){
-    var self      = this;
-    self.count    = 0;        
-    self.speed    = 0;        
-    self.currDist = 0;        
-    self.distance = 0;        
-    self.speeds   = [];
-    self.watch    = {};
-    self.path     = {};
-    self.arr      = [];
+function trackController($scope,$cordovaGeolocation,$cordovaNetwork,$state){
+    var self          = this;
+        self.count    = 0;        
+        self.speed    = 0;        
+        self.currDist = 0;        
+        self.distance = 0;        
+        self.speeds   = [];
+        self.watch    = {};
+        self.path     = {};
+        self.arr      = [];
 
     /**
      * [init function will initiate the map]
@@ -20,13 +20,13 @@ function trackController($scope,$cordovaGeolocation,$cordovaNetwork){
      */
     self.init = function(){
         var latLng = new google.maps.LatLng(0,0);
-
         var mapOptions = {
             center      : latLng,
             zoom        : 16,
             mapTypeId   : google.maps.MapTypeId.ROADMAP
         };
 
+        self.state = true;
         self.map          = new google.maps.Map(document.getElementById("map"),mapOptions);
 
         self.path = new google.maps.Polyline({
@@ -37,7 +37,7 @@ function trackController($scope,$cordovaGeolocation,$cordovaNetwork){
             strokeWeight : 4
         });
 
-        self.watchLocation();
+        self.watchLocation();    
     }
 
     /**
@@ -138,12 +138,8 @@ function trackController($scope,$cordovaGeolocation,$cordovaNetwork){
         );
     }
 
-    $scope.watchlocation = function() {
-        self.watchlocation();
-    }
-
-    $scope.stopWatching = function() {
-        self.stopWatching();
+    self.swipeLeft = function(){
+        $state.go("settings")
     }
 
     //watch for every update count and trigger update scope
@@ -151,7 +147,7 @@ function trackController($scope,$cordovaGeolocation,$cordovaNetwork){
         return self.count;
     }),self.updateSpeedDisplay);
 
-    self.init(); //need this if developing using ionic serve
+    //self.init(); //need this if developing using ionic serve
 
     //checking if the mobile device is ready
     document.addEventListener("deviceready", function () {

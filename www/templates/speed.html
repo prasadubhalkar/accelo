@@ -1,17 +1,17 @@
-<ion-view cache-view="false" view-title="Accelo">
+<ion-view cache-view="false" view-title="Accelo" on-swipe-left="tc.swipeLeft()">
 	<div class="row">
-		<div class="col-50 col-offset-10">{{distance}} miles</div>
-		<div class="col-50 col-offset-10">{{count}}</div>
+		<div class="col-50 col-offset-10">{{tc.distance}} miles</div>
+		<div class="col-50 col-offset-10">{{tc.count}}</div>
 	</div>
 	
 	<div class="padding">
-		<div class="center large" ng-class="speed >= 70 ? 'red' : (speed >= 50 ? 'yellow' : 'green') "> 
-			{{speed}}
+		<div class="center large" ng-class="tc.speed >= 70 ? 'red' : (tc.speed >= 50 ? 'yellow' : 'green')">
+			{{tc.speed}}
 		</div>
 	</div>
 
 	<div id="map" data-tap-disabled="true"></div>
 
-	<a href="#" class="button button-positive" ng-click="watchLocation()"> Start </a>
-	<a href="#" class="button button-dark" ng-click="stopWatching()"> Stop </a>
+	<a href="#" class="button button-positive" ng-click="tc.watchLocation()"> Start </a>
+	<a href="#" class="button button-dark" ng-click="tc.stopWatching()"> Stop </a>
 </ion-view>
