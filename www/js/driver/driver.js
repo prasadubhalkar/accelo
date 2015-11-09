@@ -9,9 +9,10 @@ var accelo = angular.module('accelo', ['ionic','ngCordova']);
 //initialize controller and add it to the module
 accelo.controller('trackController',trackController);
 accelo.controller('settingsController',settingsController);
+accelo.controller('homeController',homeController);
+accelo.directive('settingPage',settingPage);
+accelo.directive('trackPage',trackPage);
 
-//initiatlizing google maps api on window load
-google.maps.event.addDomListener(window,'load',this.init);
 // Ionic Starter App
 
 // angular.module is a global place for creating, registering and retrieving Angular modules
@@ -36,12 +37,9 @@ accelo.run(function($ionicPlatform) {
 accelo.config(function($stateProvider,$urlRouterProvider){
     $stateProvider.state('home', {
         url: '/',
-        templateUrl     : 'templates/speed.html',
-        controller      : 'trackController as tc'
-    }).state('settings',{
-        url: '/settings',
-        templateUrl     : 'templates/settings.html',
-        controller      : 'settingsController as sc'
+        templateUrl     : 'templates/home.html',
+        controller      : 'homeController as hc'
     });
-    $urlRouterProvider.otherwise('/home');
+
+    $urlRouterProvider.otherwise('/');
 });

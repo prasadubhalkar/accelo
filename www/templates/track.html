@@ -1,4 +1,4 @@
-<ion-view cache-view="false" view-title="Accelo" on-swipe-left="tc.swipeLeft()">
+<div id="trackPage">
 	<div class="row">
 		<div class="col-50 col-offset-10">{{tc.distance}} miles</div>
 		<div class="col-50 col-offset-10">{{tc.count}}</div>
@@ -10,8 +10,6 @@
 		</div>
 	</div>
 
-	<div id="map" data-tap-disabled="true"></div>
-
 	<a href="#" class="button button-positive" ng-click="tc.watchLocation()"> Start </a>
 	<a href="#" class="button button-dark" ng-click="tc.stopWatching()"> Stop </a>
-</ion-view>
+</div>

@@ -138,19 +138,15 @@ function trackController($scope,$cordovaGeolocation,$cordovaNetwork,$state){
         );
     }
 
-    self.swipeLeft = function(){
-        $state.go("settings")
-    }
-
     //watch for every update count and trigger update scope
     $scope.$watch(angular.bind(self,function(){
         return self.count;
     }),self.updateSpeedDisplay);
 
-    //self.init(); //need this if developing using ionic serve
+    self.init(); //need this if developing using ionic serve
 
     //checking if the mobile device is ready
-    document.addEventListener("deviceready", function () {
+    /*document.addEventListener("deviceready", function () {
         var isOnline = $cordovaNetwork.isOnline();
 
         //is device online 
@@ -160,5 +156,5 @@ function trackController($scope,$cordovaGeolocation,$cordovaNetwork,$state){
             alert("Device is offline");
         }
         
-    },false);
+    },false);*/
 }

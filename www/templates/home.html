@@ -1,0 +1,14 @@
+<ion-view cache-view="false" 
+	  	view-title="Accelo" 
+	  	on-swipe-left="hc.swipeLeft()"
+	  	on-swipe-right="hc.swipeRight()">
+
+	<div ng-show="hc.showTrack">	
+		<track-page></track-page>
+	</div>
+	<div id="map" data-tap-disabled="true" ng-show="hc.showTrack"></div>
+
+	<div ng-show="hc.showSettings">
+		<setting-page></setting-page>
+	</div>
+</ion-view>
