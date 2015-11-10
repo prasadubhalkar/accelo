@@ -1,3 +1,17 @@
-<div id="settingPage">
-	<h1>Settings</h1>
+<div class="settingsPage"> 
+	<ion-toggle ng-model="sc.kmMode" 
+				toggle-class="toggle-calm" 
+				ng-change="sc.changeKM()">Distance in KM?</ion-toggle>
+
+	<ion-toggle ng-model="sc.saveMode" 
+				toggle-class="toggle-calm"
+				ng-change="sc.changeSaveMode()">Save trips?</ion-toggle>
+
+	<ion-toggle ng-model="sc.walkMode" 
+				toggle-class="toggle-calm"
+				ng-change="sc.changeWalkMode()">Walk mode?</ion-toggle>
+
+	<ion-toggle ng-model="sc.avgMode" 
+				toggle-class="toggle-calm"
+				ng-change="sc.changeAvgMode()">Show Average?</ion-toggle>
 </div>
